@@ -8,18 +8,9 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Iterator;
-
-import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-
-import com.google.gson.Gson;
-import com.wheter.ApiNasa.Json.JSONArray;
 import com.wheter.ApiNasa.Json.JSONObject;
-import com.wheter.ApiNasa.model.temperatureResource;
-
-import antlr.collections.List;
-import ch.qos.logback.classic.Level;
-import ch.qos.logback.classic.Logger;
+import com.wheter.ApiNasa.model.MarsWeatherService;
 
 @SpringBootApplication
 public class ApiNasaApplication {
@@ -44,7 +35,7 @@ public class ApiNasaApplication {
 			
 			int responseCode = con.getResponseCode();
 			System.out.println("Get from URL = "+url);
-			System.out.println("Response code = "+responseCode);
+			System.out.println("Response code = "+responseCode+"\n");
 			
 			BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()));
 			String inputLine;
@@ -55,60 +46,64 @@ public class ApiNasaApplication {
 				response.append(inputLine);
 			}
 			
+			JSONObject jsonObjTemp = new JSONObject(response.toString().trim());
+			Iterator<String> keys = jsonObjTemp.keys();					
+//			System.out.println(jsonObjTemp);
 			
-			JSONObject jsonObjTemp = new JSONObject(response.toString());
-			System.out.println(jsonObjTemp);
-			
-			JSONObject jsonObjNumber = jsonObjTemp.getJSONObject("425");
-			JSONObject jsonObjAT = jsonObjNumber.getJSONObject("AT");
-			double jsonObjAv = jsonObjAT.getDouble("av");
-			
-			System.out.println(jsonObjAv); //retorna o valor de av do Json
-			
-			
-			
-			/*ArrayList<temperatureResource> listOfTemperatureResource = new ArrayList<temperatureResource>();
-			
-			double totalTemp = 0;
-			
-			Iterator<String> iTemperatureResource = jsonObjTemp.keys(); 
-			while(iTemperatureResource.hasNext()) {
-				
-				JSONObject newObjTemp = jsonObjTemp.getJSONObject(iTemperatureResource.next());
-				System.out.println(newObjTemp.toString());
-				
-				JSONArray newArrayTemp = newObjTemp.getJSONArray("av"); 				
-				System.out.println(newArrayTemp.toString());
-				
-				totalTemp += newArrayTemp.getDouble(0);
-				
-				/*temperatureResource newTemp = new temperatureResource();
-				newTemp.setIdSol(newJsonTemp.getString("AT"));
-				newTemp.setName(newJsonTemp.getString(""));
-				newTemp.setValue(newJsonTemp.getString("av"));					
-			};
-			
-			System.out.println(totalTemp);*/
-					
+			ArrayList<MarsWeatherService> newMWS = new ArrayList<MarsWeatherService>();
+			double avgTemp = 0;
+			double count = 0;
+			while (keys.hasNext()) {
+				String key = keys.next();
+				if (jsonObjTemp.get(key) instanceof JSONObject) {			          
+					//System.out.println(jsonObjTemp.get(key));					
+					if (tryParseStringInt(key)) {
+						double valTemp = getAtValue(jsonObjTemp.getJSONObject(key));
+						MarsWeatherService marsWeatherService = 
+								new MarsWeatherService(
+										Integer.parseInt(key),
+										valTemp,
+										"",
+										""
+										);
+						newMWS.add(marsWeatherService);
+						avgTemp += valTemp;
+						count++;
+					}
+			    }
+			}
+			double avg = (avgTemp/count);
+			System.out.println("AVG Mars Weather Service API: " + avg);	
+							
 			in.close();
 			
-			//String data = response.toString();
-			//System.out.println(data);
-
-			//temperatureResource msg = new Gson().fromJson(data, temperatureResource.class);			
-	
 		} catch (MalformedURLException ex) {
-			//Log
+			// TODO Log
 	    } catch (IOException ex) {
-	        //Log
+	        // TODO Log
 	    } finally {
 	       if (con != null) {
 	    	   try {
 	    		   con.disconnect();
 	    	   } catch (Exception ex) {
-	    		   //Log
+	    		   // TODO Log
 	    	   }
 	       }
 	    }
 	}
+
+	private double getAtValue(JSONObject obj) {
+		JSONObject jsonObjAT = obj.getJSONObject("AT");
+		return jsonObjAT.getDouble("av");
+	}
+
+	private boolean tryParseStringInt(String value) {
+	    try {
+	    	Integer.parseInt(value);
+	        return true;
+	    } catch (NumberFormatException e) {
+	        return false;
+	    }
+	}
+	
 }
