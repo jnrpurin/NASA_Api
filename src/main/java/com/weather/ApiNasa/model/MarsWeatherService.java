@@ -1,4 +1,4 @@
-package com.wheter.ApiNasa.model;
+package com.weather.ApiNasa.model;
 
 public class MarsWeatherService {
 	private int id;

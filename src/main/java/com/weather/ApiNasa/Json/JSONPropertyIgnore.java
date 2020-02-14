@@ -1,4 +1,4 @@
-package com.wheter.ApiNasa.Json;
+package com.weather.ApiNasa.Json;
 
 /*
 Copyright (c) 2018 JSON.org
@@ -36,12 +36,8 @@ import java.lang.annotation.Target;
 @Target({METHOD})
 /**
  * Use this annotation on a getter method to override the Bean name
- * parser for Bean -&gt; JSONObject mapping. A value set to empty string <code>""</code>
- * will have the Bean parser fall back to the default field name processing.
+ * parser for Bean -&gt; JSONObject mapping. If this annotation is
+ * present at any level in the class hierarchy, then the method will
+ * not be serialized from the bean into the JSONObject.
  */
-public @interface JSONPropertyName {
-    /**
-     * @return The name of the property as to be used in the JSON Object.
-     */
-    String value();
-}
+public @interface JSONPropertyIgnore { }

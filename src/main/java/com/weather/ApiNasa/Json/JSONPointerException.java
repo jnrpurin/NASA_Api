@@ -1,4 +1,4 @@
-package com.wheter.ApiNasa.Json;
+package com.weather.ApiNasa.Json;
 
 /*
 Copyright (c) 2002 JSON.org
@@ -22,48 +22,24 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
- */
+*/
 
 /**
- * The JSONException is thrown by the JSON.org classes when things are amiss.
- *
+ * The JSONPointerException is thrown by {@link JSONPointer} if an error occurs
+ * during evaluating a pointer.
+ * 
  * @author JSON.org
- * @version 2015-12-09
+ * @version 2016-05-13
  */
-public class JSONException extends RuntimeException {
-    /** Serialization ID */
-    private static final long serialVersionUID = 0;
+public class JSONPointerException extends JSONException {
+    private static final long serialVersionUID = 8872944667561856751L;
 
-    /**
-     * Constructs a JSONException with an explanatory message.
-     *
-     * @param message
-     *            Detail about the reason for the exception.
-     */
-    public JSONException(final String message) {
+    public JSONPointerException(String message) {
         super(message);
     }
 
-    /**
-     * Constructs a JSONException with an explanatory message and cause.
-     * 
-     * @param message
-     *            Detail about the reason for the exception.
-     * @param cause
-     *            The cause.
-     */
-    public JSONException(final String message, final Throwable cause) {
+    public JSONPointerException(String message, Throwable cause) {
         super(message, cause);
-    }
-
-    /**
-     * Constructs a new JSONException with the specified cause.
-     * 
-     * @param cause
-     *            The cause.
-     */
-    public JSONException(final Throwable cause) {
-        super(cause.getMessage(), cause);
     }
 
 }

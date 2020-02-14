@@ -1,4 +1,4 @@
-package com.wheter.ApiNasa.Json;
+package com.weather.ApiNasa.Json;
 
 /*
 Copyright (c) 2002 JSON.org
@@ -25,19 +25,45 @@ SOFTWARE.
  */
 
 /**
- * The <code>JSONString</code> interface allows a <code>toJSONString()</code>
- * method so that a class can change the behavior of
- * <code>JSONObject.toString()</code>, <code>JSONArray.toString()</code>,
- * and <code>JSONWriter.value(</code>Object<code>)</code>. The
- * <code>toJSONString</code> method will be used instead of the default behavior
- * of using the Object's <code>toString()</code> method and quoting the result.
+ * The JSONException is thrown by the JSON.org classes when things are amiss.
+ *
+ * @author JSON.org
+ * @version 2015-12-09
  */
-public interface JSONString {
+public class JSONException extends RuntimeException {
+    /** Serialization ID */
+    private static final long serialVersionUID = 0;
+
     /**
-     * The <code>toJSONString</code> method allows a class to produce its own JSON
-     * serialization.
+     * Constructs a JSONException with an explanatory message.
      *
-     * @return A strictly syntactically correct JSON text.
+     * @param message
+     *            Detail about the reason for the exception.
      */
-    public String toJSONString();
+    public JSONException(final String message) {
+        super(message);
+    }
+
+    /**
+     * Constructs a JSONException with an explanatory message and cause.
+     * 
+     * @param message
+     *            Detail about the reason for the exception.
+     * @param cause
+     *            The cause.
+     */
+    public JSONException(final String message, final Throwable cause) {
+        super(message, cause);
+    }
+
+    /**
+     * Constructs a new JSONException with the specified cause.
+     * 
+     * @param cause
+     *            The cause.
+     */
+    public JSONException(final Throwable cause) {
+        super(cause.getMessage(), cause);
+    }
+
 }

@@ -1,4 +1,4 @@
-package com.wheter.ApiNasa.Json;
+package com.weather.ApiNasa.Json;
 
 import java.io.Closeable;
 
